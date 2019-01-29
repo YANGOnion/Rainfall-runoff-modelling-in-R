@@ -25,7 +25,7 @@ levelplot(crop(ras_forcing,wts_poly,snap='out')[[1]],margin=list(draw=F),colorke
 
 ## to output the data.table with date and forcing variables 
 library(data.table)
-dt=data.table(date=seq(as.Date('1960-01-01'),as.Date('1960-12-31'),1),tasmean=areal_value)
+dt=data.table(date=seq(as.Date('1960-01-01'),as.Date('1960-01-31'),1),tasmean=areal_value)
 head(dt)
 
 ################################### model calibration and simulation ################################
@@ -33,25 +33,29 @@ head(dt)
 source('gr_model.R')
 
 library(data.table)
-dt=fread('output/66193.csv')
+dt=fread('input/66193.csv')
 dt[,date:=as.Date(date)]
 
 ## calibration
 cab=grcab(dt=dt,start='1960-01-01',end='1979-12-31',snow=F)
+cab$crit # calibration NSE
 
 ## simulation
 sim=grsim(dt=dt,start='1980-01-01',end='2000-12-31',param=cab$param,snow=F)
+sim$crit # validation NSE
 
 ## extracting simulated series
 out=SumOutputGr4j(sim$output)
-
-## the data frame of simulated results
-dt_sim=cbind(dt[date>=as.Date('1980-01-01')],out)
-
+head(out)
 
 ##################################### hydrograph visualization ######################################
 
 source('hydrograph.R')
+
+## the data frame of simulated results
+dt_sim=cbind(dt[date>=as.Date('1980-01-01')],out)
+head(dt_sim)
+
 hydrograph(dt=dt_sim,rain_var='rainfall',flow_var=c('runoff','Qsim'),start='2000-01-01',end='2000-12-31')
 
 
