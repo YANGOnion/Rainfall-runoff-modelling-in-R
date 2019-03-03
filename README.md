@@ -14,10 +14,10 @@ __1.1 Creating a spatial point of the watershed outlet__
 We first create a shapefile of a spatial point for the outlet of the watershed. Here we use the hydrological gauge coded 66193 located at (113.45, 27.66667) as the `create_point.R` shows.
 ```r
 library(raster)
-df=data.frame(id=66193,lon=113.45,lat=27.66667)
+df=data.frame(lon=113.45,lat=27.66667)
 p=SpatialPoints(df, proj4string=CRS('+proj=longlat +datum=WGS84'))
 p=SpatialPointsDataFrame(p, data=df)
-shapefile(p, paste('input/point/',i,'.shp',sep=''), overwrite=TRUE)
+shapefile(p, 'input/point/66193.shp', overwrite=TRUE)
 ```
 
 __1.2 Extracting the watershed polygon__
