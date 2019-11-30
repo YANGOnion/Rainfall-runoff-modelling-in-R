@@ -16,7 +16,6 @@ We first create a shapefile of a spatial point for the outlet of the watershed. 
 library(raster)
 df=data.frame(lon=113.45,lat=27.66667)
 p=SpatialPoints(df, proj4string=CRS('+proj=longlat +datum=WGS84'))
-df$id=1
 p=SpatialPointsDataFrame(p, data=df)
 shapefile(p, 'input/point/66193.shp', overwrite=TRUE)
 ```
@@ -40,7 +39,7 @@ def wts_extrat(dir_raster,acc_raster,point,snap_output,Watersh_as_d1,RasterT_Wat
         None
     """
 	# Process: 捕捉倾泻点
-	arcpy.gp.SnapPourPoint_sa(point, acc_raster, snap_output, ".015", "id")
+	arcpy.gp.SnapPourPoint_sa(point, acc_raster, snap_output, ".015")
 	# Process: 分水岭
 	arcpy.gp.Watershed_sa(dir_raster, snap_output, Watersh_as_d1, "VALUE")
 	# Process: 栅格转面
